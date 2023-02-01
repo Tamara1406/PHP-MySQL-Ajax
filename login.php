@@ -1,3 +1,32 @@
+<?php
+
+require 'model/klijent.php';
+require 'dbBroker.php';
+
+session_start();
+
+if (isset($_POST['korisnickoIme']) && isset($_POST['lozinka'])) {
+    $korIme = $_POST['korisnickoIme'];
+    $lozinka = $_POST['lozinka'];
+
+    $klijent = Klijent::login($korIme, $lozinka, $conn);
+
+    if($klijent){
+
+		echo "Uspesno ste se prijavili!";
+		
+		$_SESSION['Id'] = $klijent->IdKlijenta;
+		header("Location: home.php");
+		exit();
+	}else{
+		echo "Niste dobro uneli lozinku ili korisnicko ime!";
+	}
+
+}
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
