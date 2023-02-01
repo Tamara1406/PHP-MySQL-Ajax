@@ -1,0 +1,30 @@
+* {
+    font-family:'Times New Roman', Times, serif;
+}
+
+
+h1 {
+    text-align: left;
+    margin-left: 20px;
+    color: black;
+    margin-top: 10px;
+}
+
+body{
+    background-image: url("../images/rim.webp" );
+    background-size: 100% 100%;
+    background-attachment: fixed; 
+}
+
+.naslovIza{
+    background-color: aquamarine;
+    margin-right: 950px;
+}
+
+.meni .dugme {
+    border-radius: 15px;
+    font-size: 18px;
+    width: 25%;
+    height: 30px;
+    margin-top: 20px;
+}

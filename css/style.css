@@ -1,0 +1,44 @@
+* {
+    font-family:'Times New Roman', Times, serif;
+}
+
+body {
+    background-image: url("../images/barselona.jpg");
+    background-size: 100% 185%;
+}
+
+form {
+    display: flex;
+    margin-top: 100px;
+    margin-left: 200px;
+    height: 300px;
+    width: 500px;
+}
+
+input[type=text], input[type=password] {
+    border: 1.5px solid black;
+    padding: 10px 10px;
+    margin: 8px 8px;
+    border-radius: 5px;
+
+}
+
+.korisnickoIme{
+    margin-left: -47px;
+   
+} 
+
+.prijava-form .btn.btn-prijava{
+    margin-top: 20px;
+    margin-left: 115px;
+    border-radius: 10px;
+    background-color:coral;
+    font-size: 18px;
+    width: 50%;
+    height: 30px;
+}
+
+
+.container {
+    padding: 30px;
+}
