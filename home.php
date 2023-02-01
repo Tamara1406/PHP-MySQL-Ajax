@@ -49,9 +49,7 @@
 						    </tr>
 						  </thead>
 						  <tbody class="tableBody">
-							<?php
-								while($red = $result->fetch_array()){
-							?>
+							
 						    <tr id = 'ar-<?php echo $red['IdAranzmana']?>'>
 						      <th scope="row"><?php echo $red['IdAranzmana']?></th>
 						      <td><?php echo $red['Naziv']?></td>
@@ -59,8 +57,7 @@
 						      <td><?php echo $red['BrojDana']?></td>
 							  <td class="radio"><input type="radio" name = "izaberi" value=<?php echo $red["IdAranzmana"] ?>></td>
 						    </tr>
-							<?php }
-							?>							
+													
 						  </tbody>
 						</table>
 					</div>
