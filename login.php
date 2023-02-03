@@ -11,7 +11,7 @@ if (isset($_POST['korisnickoIme']) && isset($_POST['lozinka'])) {
 
     $klijent = Klijent::login($korIme, $lozinka, $conn);
 
-    if($klijent){
+    if($klijent->num_rows==1){
 
 		echo "Uspesno ste se prijavili!";
 		
