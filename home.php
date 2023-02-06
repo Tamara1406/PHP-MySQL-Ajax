@@ -33,7 +33,6 @@ if(!$result1){
 
 if($result1->num_rows == 0){
 	echo "Nema zakazanih putovanja!";
-	die();
 }
 
 ?>
@@ -49,7 +48,14 @@ if($result1->num_rows == 0){
     <title>Document</title>
 </head>
 <body>
-    
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="js/hom.js"></script>
+
+	
+
+
+
 <div class="naslovIza">
     <div class="col-md-3" style="color: black;"><h1>Zakažite svoje letovanje na vreme!</h1></div> 
 </div> 
@@ -79,11 +85,11 @@ if($result1->num_rows == 0){
 						  <?php
 								while($red = $result->fetch_array()){
 							?>
-						    <tr id = 'ar-<?php echo $red['IdAranzmana']?>'>
+						    <tr id = 'aranzman-<?php echo $red['IdAranzmana']?>'>
 						      <th scope="row"><?php echo $red['IdAranzmana']?></th>
 						      <td><?php echo $red['Naziv']?></td>
-						      <td><?php echo $red['Cena']?></td>
 						      <td><?php echo $red['BrojDana']?></td>
+							  <td><?php echo $red['Cena']?></td>
 							  <td class="radio"><input type="radio" name = "izaberi" value=<?php echo $red["IdAranzmana"] ?>></td>
 						    </tr>
 							<?php }
@@ -100,22 +106,22 @@ if($result1->num_rows == 0){
 </div>
 
 
-
 <div class="meni" style="margin-left: 100px;">
+	<div class="col-md-3">
+        <button id="btn-zakazi"  class="dugme" onclick="dodajRezervaciju()" style="background-color: rgb(120, 197, 199); border: 1px solid white; "> 
+					Zakaži putovanje</button>
+		</div>
     <div class="col-md-3">
-        <button id="btn-zakazi"  class="dugme" 
-        style="background-color: rgb(120, 197, 199); border: 1px solid white; "> Zakaži putovanje</button>
+        <button id="btn-pretrazi" onclick="pretrazi()" type="button" class="dugme" style="background-color: rgb(120, 197, 199); border: 1px 
+					solid white;" >Pretraži po mestu</button>
+		<input id = "myInput" type="text" placeholder="Ime grada">
     </div>
     <div class="col-md-3">
-        <button id="btn-dodaj" onclick="dodaj()" type="button" class="dugme"
-                style="background-color: rgb(120, 197, 199); border: 1px solid white;" >Dodaj aranžman</button>
-
-    </div>
-    <div class="col-md-3">
-        <button id="btn-obrisi"  class="dugme"
+	<button id="btn-izbrisi"  class="dugme"  onclick ="obrisi()"
                 style="background-color: rgb(120, 197, 199); border: 1px solid white;" > Otkaži putovanje</button>
     </div>
 </div>
+	
 
 
 
@@ -129,21 +135,22 @@ if($result1->num_rows == 0){
 			<div class="row">
 				<div class="col-md-12">
 					<div class="table-wrap">
-						<table class="table table-bordered table-dark table-hover">
+						<table id = "tabela" class="table table-bordered table-dark table-hover">
 						  <thead>
 						    <tr>
 							  <th>#</th>
 						      <th>Aranžman</th>
+							  <th>Broj dana</th>
 						    </tr>
 						  </thead>
-						  <tbody class="tableBody">
+						  <tbody class="tableBody1">
 						  <?php
 								while($red = $result1->fetch_array()){
 							?>
-						    <tr id = 'ar-<?php echo $red['IdRezervacije']?>'>
-						      <th scope="row"><?php echo $red['IdRezervacije']?></th>
-						      <td><?php echo $red['Aranzman']?></td>
-							  <td class="radio"><input type="radio" name = "izaberi" value=<?php echo $red["IdRezervacije"] ?>></td>
+						    <tr id = 'rezervacija-<?php echo $red['IdAranzmana']?>'>
+						      <th scope="row"><?php echo $red['IdAranzmana']?></th>
+						      <td><?php echo $red['Naziv']?></td>
+						      <td><?php echo $red['BrojDana']?></td>
 						    </tr>
 							<?php }
 							?>
@@ -162,7 +169,55 @@ if($result1->num_rows == 0){
 <a href = "logout.php" style="position:absolute; top: 10px; right: 10px;"><button type="button" class="btn btn-default" >Odjavi se</button></a>
                 </div>
 
-<script src="js/main.js"></script>
+	
+	
+	
+
+
+<script>
+
+
+
+function pretrazi() {
+
+event.preventDefault();
+
+let text = $('#myInput')[0].value;
+
+if(text == ""){
+	alert("Unesite autora")
+	return
+}
+
+$('.tableBody1').empty()
+$('#myInput').val("")
+
+
+$.post("handler/getByCity.php", "Naziv=" + text, function (data) {
+	let array = data.split("}")
+	array.pop()
+	array.forEach(element => {
+		element = element + "}"
+		let obj = JSON.parse(data)
+
+		let row = $(`#aranzman-${obj.IdAranzmana} td`);
+
+		$('#tabela tbody').append(`
+		<tr id = 'aranzman-${obj.IdAranzmana}'>
+				<th scope="row">${obj.IdAranzmana}</th>
+				<td>${obj.Naziv}</td>
+				<td>${obj.BrojDana}</td>
+			</tr>
+		`)
+
+	});
+})
+}
+
+
+
+	</script>
+
 
 
 </body>
