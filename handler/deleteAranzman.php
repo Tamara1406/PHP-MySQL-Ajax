@@ -3,7 +3,7 @@
 require "../dbBroker.php";
 require "../model/aranzman.php";
 
-if (isset($_POST['IdAranzmana'])) {
+if (isset($_POST["IdAranzmana"])) {
 
     $status = Aranzman::deleteById($_POST['IdAranzmana'], $conn);
 

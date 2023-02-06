@@ -3,9 +3,9 @@
 require "../dbBroker.php";
 require "../model/rezervacija.php";
 
-if (isset($_POST['KorisnickoIme']) && isset($_POST["Aranzman"])) {
+if (isset($_POST["IdAranzmana"])) {
 
-    $status = Rezervacija::add($_POST['KorisnickoIme'], $_POST["Aranzman"], $conn);
+    $status = Rezervacija::add($_POST["IdAranzmana"], $conn);
 
     if ($status) {
         echo "Success";

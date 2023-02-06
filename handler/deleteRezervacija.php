@@ -3,9 +3,9 @@
 require "../dbBroker.php";
 require "../model/rezervacija.php";
 
-if (isset($_POST['IdRezervacije'])) {
+if (isset($_POST["Aranzman"])) {
 
-    $status = Rezervacija::deleteById($_POST['IdRezervacije'], $conn);
+    $status = Rezervacija::delete($_POST["Aranzman"], $conn);
 
     if ($status) {
         echo "Success";
