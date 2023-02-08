@@ -20,17 +20,12 @@ class Aranzman{
         return $conn->query($q);
     }
 
-    public static function add($Naziv, $Cena, $BrojDana, mysqli $conn)
-    {
-        $q = "INSERT INTO Aranzmani(Naziv, Cena, BrojDana) VALUES('$Naziv', $Cena, $BrojDana)";
+    public static function sortTable($conn){
+        $q = "SELECT * FROM Aranzmani ORDER BY Cena ASC";
         return $conn->query($q);
     }
 
-    public static function deleteById($IdAranzmana, mysqli $conn)
-    {
-        $q = "DELETE FROM Aranzmani WHERE IdAranzmana=$IdAranzmana";
-        return $conn->query($q);
-    }
+    
 }
 
 ?>

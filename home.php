@@ -7,10 +7,10 @@ require "model/rezervacija.php";
 session_start();
 
 
-//if(empty($_SESSION['user']) || $_SESSION['user'] == ''){
-//	header("Location: login.php");
-//	exit();
-//}
+if(empty($_SESSION['user']) || $_SESSION['user'] == ''){
+	header("Location: login.php");
+	exit();
+}
 
 $result = Aranzman::getAll($conn);
 
@@ -77,8 +77,8 @@ if($result1->num_rows == 0){
 						    <tr>
 						      <th>#</th>
 						      <th>Naziv</th>
-						      <th>Cena</th>
 						      <th>Broj dana</th>
+						      <th>Cena</th>
 						    </tr>
 						  </thead>
 						  <tbody class="tableBody">
@@ -110,15 +110,23 @@ if($result1->num_rows == 0){
 	<div class="col-md-3">
         <button id="btn-zakazi"  class="dugme" onclick="dodajRezervaciju()" style="background-color: rgb(120, 197, 199); border: 1px solid white; "> 
 					Zakaži putovanje</button>
+        <button id="btn-sortiraj"  class="dugme" onclick="sort()" style="background-color: rgb(120, 197, 199); margin-left: 570px; border: 1px solid white; "> 
+					Sortiraj prema ceni</button>
 		</div>
     <div class="col-md-3">
         <button id="btn-pretrazi" onclick="pretrazi()" type="button" class="dugme" style="background-color: rgb(120, 197, 199); border: 1px 
 					solid white;" >Pretraži po mestu</button>
 		<input id = "myInput" type="text" placeholder="Ime grada">
+		
+		<button id="btn-prikazi" onclick="prikazi()" class="dugme"  style="background-color: rgb(120, 197, 199); margin-left: 400px; border: 1px solid white; "> 
+					Prikazi sva zakazana putovanja</button>
     </div>
     <div class="col-md-3">
 	<button id="btn-izbrisi"  class="dugme"  onclick ="obrisi()"
                 style="background-color: rgb(120, 197, 199); border: 1px solid white;" > Otkaži putovanje</button>
+		<input id = "myInput1" type="text" placeholder="Ime grada" style="margin-left : 400px;">
+	<button id="btn-izbrisiSve"  class="dugme"  onclick ="obrisiMesto()"
+                style="background-color: rgb(120, 197, 199); border: 1px solid white;" > Otkaži izabrano putovanje</button>
     </div>
 </div>
 	
@@ -178,6 +186,35 @@ if($result1->num_rows == 0){
 
 
 
+function prikazi(){
+
+event.preventDefault();
+
+$('.tableBody1').empty()
+
+$.get("handler/getAllRezervacija.php", function (data) {
+  let array = data.split("}");
+  array.pop();
+  array.forEach(element => {
+	element = element + "}";
+	let obj = JSON.parse(element);
+
+	let row = $(`#aranzman-${obj.IdAranzmana} td`);
+
+	$('#tabela tbody').append(`
+	  <tr id = 'aranzman-${obj.IdAranzmana}'>
+			  <th scope="row">${obj.IdAranzmana}</th>
+			  <td>${obj.Naziv}</td>
+			  <td>${obj.BrojDana}</td>
+		  </tr>
+	  `);
+
+  });
+})
+}
+
+
+
 function pretrazi() {
 
 event.preventDefault();
@@ -185,8 +222,8 @@ event.preventDefault();
 let text = $('#myInput')[0].value;
 
 if(text == ""){
-	alert("Unesite autora")
-	return
+  alert("Unesite grad")
+  return
 }
 
 $('.tableBody1').empty()
@@ -194,27 +231,88 @@ $('#myInput').val("")
 
 
 $.post("handler/getByCity.php", "Naziv=" + text, function (data) {
-	let array = data.split("}")
-	array.pop()
-	array.forEach(element => {
-		element = element + "}"
-		let obj = JSON.parse(data)
+  let array = data.split("}")
+  array.pop()
+  array.forEach(element => {
+	element = element + "}"
+	let obj = JSON.parse(data)
 
-		let row = $(`#aranzman-${obj.IdAranzmana} td`);
+	let row = $(`#aranzman-${obj.IdAranzmana} td`);
 
-		$('#tabela tbody').append(`
-		<tr id = 'aranzman-${obj.IdAranzmana}'>
-				<th scope="row">${obj.IdAranzmana}</th>
-				<td>${obj.Naziv}</td>
-				<td>${obj.BrojDana}</td>
-			</tr>
-		`)
+	$('#tabela tbody').append(`
+	<tr id = 'aranzman-${obj.IdAranzmana}'>
+		<th scope="row">${obj.IdAranzmana}</th>
+		<td>${obj.Naziv}</td>
+		<td>${obj.BrojDana}</td>
+	  </tr>
+	`)
 
-	});
+  });
 })
 }
 
 
+
+function sort() {
+
+event.preventDefault();
+
+$('.tableBody').empty()
+
+$.get("handler/sort.php", function (data) {
+  
+  let array = data.split("}")
+  array.pop()
+  
+  array.forEach(element => {
+	element = element + "}"
+	let obj = JSON.parse(element)
+
+	$('.tableBody').append(`
+	<tr id = 'aranzman-${obj.IdAranzmana}'>
+		<th scope="row">${obj.IdAranzmana}</th>
+		<td>${obj.Naziv}</td>
+		<td>${obj.BrojDana}</td>
+		<td>${obj.Cena}</td>
+		<td class="radio"><input type="radio" name = "izaberi" value= ${obj.IdAranzmana}></td>					  
+	  </tr>
+  `)
+
+  });
+})
+}
+
+
+
+function obrisiMesto() {
+	event.preventDefault();
+
+  let text = $('#myInput1')[0].value;
+
+  if(text == ""){
+    alert("Unesite grad")
+    return
+  }
+  
+  $('#myInput1').val("")
+
+	
+    request = $.ajax({
+      url: "handler/deleteByMestoRezervacija.php",
+      type: "post",
+      data: "Naziv=" + text
+    });
+    request.done(function (response, textStatus, jqXHR) {
+      if (response === "Success") {
+        alert("Rezervacija je obrisana");
+        console.log("Rezervacija je obrisana ");
+        
+      } else {
+        console.log("Rezervacija nije obrisana " + response);
+        alert("Rezervacija nije obrisana");
+      }
+    });
+  };
 
 	</script>
 

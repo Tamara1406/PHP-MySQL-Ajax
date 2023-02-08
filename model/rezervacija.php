@@ -31,6 +31,12 @@ class Rezervacija{
         $q = "SELECT * FROM Aranzmani WHERE IdAranzmana IN (SELECT Aranzman FROM Rezervacija) AND Naziv = '$Naziv';";
         return $conn->query($q);
     }
+
+    public static function deleteByMesto($Naziv, mysqli $conn)
+    {
+        $q = "DELETE FROM Rezervacija WHERE Aranzman IN (SELECT IdAranzmana FROM Aranzmani WHERE Naziv = '$Naziv')";
+        return $conn->query($q);
+    }
 }
 
 
