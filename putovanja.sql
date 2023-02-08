@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 03, 2023 at 04:54 PM
+-- Generation Time: Feb 08, 2023 at 07:01 PM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 8.0.11
 
@@ -40,7 +40,9 @@ CREATE TABLE `aranzmani` (
 
 INSERT INTO `aranzmani` (`IdAranzmana`, `Naziv`, `Cena`, `BrojDana`) VALUES
 (1, 'Madrid', 26000, 4),
-(2, 'Rim', 19000, 3);
+(2, 'Rim', 19000, 3),
+(3, 'Temisvar', 2000, 1),
+(4, 'Pariz', 32000, 5);
 
 -- --------------------------------------------------------
 
@@ -78,7 +80,8 @@ CREATE TABLE `rezervacija` (
 --
 
 INSERT INTO `rezervacija` (`IdRezervacije`, `Aranzman`) VALUES
-(1, 1);
+(36, 3),
+(33, 4);
 
 --
 -- Indexes for dumped tables
@@ -101,7 +104,18 @@ ALTER TABLE `klijent`
 --
 ALTER TABLE `rezervacija`
   ADD PRIMARY KEY (`IdRezervacije`),
-  ADD KEY `Rez` (`Aranzman`);
+  ADD UNIQUE KEY `IdRezervacije` (`IdRezervacije`),
+  ADD UNIQUE KEY `Aranzman` (`Aranzman`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `rezervacija`
+--
+ALTER TABLE `rezervacija`
+  MODIFY `IdRezervacije` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- Constraints for dumped tables
