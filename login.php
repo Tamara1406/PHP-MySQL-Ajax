@@ -14,7 +14,7 @@ if (isset($_POST['korisnickoIme']) && isset($_POST['lozinka'])) {
     if($klijent->num_rows==1){
 
 		echo "Uspesno ste se prijavili!";
-		
+		$_SESSION['user'] = "prijavljen";
 		$_SESSION['Id'] = $klijent->IdKlijenta;
 		header("Location: home.php");
 		exit();
